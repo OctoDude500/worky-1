@@ -3,7 +3,7 @@ const pool = require("./models/db");
 require("dotenv").config();
 const cors = require("cors");
 const leadRoutes = require("./routes/leads");
-
+const userRoutes = require("./routes/user");
 //express app
 const app = express();
 
@@ -11,12 +11,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//routes
+//---- routes -----
+//lead routes
 app.use("/", leadRoutes);
-
-/*app.get("/", (req, res) => {
-    res.send("<h1>worky 555</h1>");
-})*/
+//user routes
+app.use("/user", userRoutes);
 
 const port = 8000;
 

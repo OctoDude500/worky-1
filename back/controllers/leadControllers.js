@@ -1,4 +1,4 @@
-//const leadDB = require("../models/database.sql");
+//const leadDB = require("../models/leads.sql");
 const pool = require("../models/db");
 const {v4: uuidv4} = require("uuid");
 
@@ -27,8 +27,6 @@ const getLeads = async (req, res) => {
         )
         console.log("got data...")
         res.status(200).json(getLeads.rows);
-        //res.status(200).send('<h2>posted</h2>');
-        // res.status(200).json("success");
     } catch (err) {
         console.log(err.message)
         res.status(500).json("Couldn't get data. Something went wrong.")
