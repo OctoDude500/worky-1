@@ -2,8 +2,16 @@ const pool = require("../models/db");
 const {v4: uuidv4} = require("uuid");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
+const jwt = require("jsonwebtoken")
 
+//create json web token
+const createToken = (user_id) => {
+    //the secret can be generated with a password generator. it can be anything and
+    //it's user generated
+    return jwt.sign({user_id}, process.env.SECRET, {expiresIn: "1d"});
+}
 
+// signup logic
 const signUp = async (is_email, is_password) => {
     //validation
     if(!is_email || !is_password) {
@@ -43,22 +51,64 @@ const signUp = async (is_email, is_password) => {
    return createUser.rows
 }
 
+
+
+//login logic
+const login = async (is_email, is_password) => {
+    //validation
+    if(!is_email || !is_password) {
+        throw Error("Please fill all fields");
+    }
+
+    //check if the email in use already exists
+    const exists =  await pool.query(
+        "SELECT user_id, email, password FROM users where email = $1",
+        [is_email],
+    );
+
+    if(exists.rows.length === 0) {
+        throw Error("This email does not exist")
+    }
+
+    //console.log("got user", exists.rows[0].password)
+   const  match = await bcrypt.compare(is_password, exists.rows[0].password)
+    //console.log("is match ", match)
+    if(!match) {
+        throw Error("incorrect password!")
+    }
+
+    return exists.rows
+}
+
 //signup user
 const signupUser = async (req, res) => {
+    const {user_code, email, password} = req.body;
     try{
-        const {user_code, email, password} = req.body;
         //the user method in the tutorial
         const user = await signUp(email, password)
-        res.status(201).json({email, user})
+        //console.log("is user", user[0].user_id)
+        //create token
+        const token = createToken(user[0].user_id);
+        res.status(201).json({email, user, token})
     } catch (error) {
         console.log(error)
-        res.json({msg: error.message})
+        res.status(500).json({msg: error.message})
     }
 }
 
 //login user
 const loginUser = async (req, res) =>{
-    res.json({msg: "messae"})
+    try {
+        const {email, password} = req.body
+        const user = await login(email, password)
+        //console.log("is userz ", user[0].user_id)
+        const token = createToken(user[0].user_id);
+        //console.log("is tooken", token)
+        res.status(200).json({msg: "Successfully logged in!", email, token})
+    } catch (error) {
+        console.log(error.message)
+        res.status(400).json({msg: error.message})
+    }
 }
 
 module.exports = {
