@@ -1,6 +1,12 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {loginUser, saveToLocal} from "../features/users/userAuth";
+
 
 const Login = () => {
+
+    const dispatch = useDispatch();
+    const userResponse = useSelector((store) => store.lucia.user)
     const [text, setText] = useState({
         email: "",
         password: ""
@@ -15,8 +21,15 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(text)
+        dispatch(loginUser({text}))
     }
+
+    useEffect(() => {
+        if(userResponse[0]) {
+            dispatch(saveToLocal())
+            console.log("dd", userResponse)
+        }
+    }, [userResponse])
 
     return(
         <form onSubmit={handleSubmit}>
@@ -37,7 +50,7 @@ const Login = () => {
                     onChange={handleOnchange}/>
             </div>
             <div>
-                <button type="submit">Signup</button>
+                <button type="submit">login</button>
             </div>
         </form>
     )

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch} from "react-redux";
-import { signUpUser } from "../features/users/signUpSlice";
-
+import { signUpUser } from "../features/users/userAuth";
+import { saveToLocal } from "../features/users/userAuth";
 
 
 const SignUp = () => {
@@ -32,15 +32,14 @@ const SignUp = () => {
 
     useEffect(() => {
         if(userResponse[0]){
-            console.log("is user", first)
-
+            dispatch(saveToLocal())
+            console.log("signup useeffect", userResponse)
         }
     }, [userResponse])
 
+
     return(
-
         <>
-
             {first && (<div>
                 <p>{first.token}</p>
                 <p>{first.email}</p>

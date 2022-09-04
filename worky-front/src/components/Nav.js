@@ -1,6 +1,11 @@
 import {Link} from "react-router-dom";
+import { signOut } from "../features/users/userAuth";
+import {useDispatch} from "react-redux";
 
 const Nav = () => {
+
+    const dispatch = useDispatch();
+
     return(
         <nav>
             <div>
@@ -11,6 +16,9 @@ const Nav = () => {
                     <li><Link to={"/signup"}>Signup</Link></li>
                     <li><Link to={"/login"}>Login</Link></li>
                 </ul>
+            </div>
+            <div>
+                <button onClick={() => dispatch(signOut())}>Log out</button>
             </div>
         </nav>
 
