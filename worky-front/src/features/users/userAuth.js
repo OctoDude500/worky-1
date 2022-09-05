@@ -38,15 +38,19 @@ const userAuth = createSlice({
         saveToLocal: (state, action) => {
             if(state.user) {
                 console.log("save to local", state.user)
-                localStorage.setItem("isUser", JSON.stringify(state.user[0].token))
-
+                localStorage.setItem("isUser", JSON.stringify({email: state.user[0].email, token: state.user[0].token }))
             }
         },
         signOut: (state, action) => {
             state.user = []
             localStorage.removeItem("isUser")
             console.log("signout")
+        },
+        loggedUser: (state, action) => {
+            console.log("logged action", action.payload)
+            state.user = [action.payload]
         }
+
     },
     extraReducers: (builder) => {
         builder
@@ -82,5 +86,5 @@ const userAuth = createSlice({
     })
 
 console.log("signup slice", userAuth)
-export const {saveToLocal, signOut} = userAuth.actions;
+export const {saveToLocal, signOut, loggedUser} = userAuth.actions;
 export default userAuth.reducer;
