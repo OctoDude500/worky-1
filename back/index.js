@@ -12,10 +12,11 @@ app.use(cors());
 app.use(express.json());
 
 //---- routes -----
-//lead routes
-app.use("/", leadRoutes);
 //user routes
 app.use("/user", userRoutes);
+//lead routes
+app.use("/", leadRoutes);
+
 
 const port = 8000;
 

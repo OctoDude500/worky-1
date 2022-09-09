@@ -5,8 +5,12 @@ const {
     updateLeadDetails,
     deleteEntry
 } = require("../controllers/leadControllers");
+const requireAuth = require("../middleware/requireAuth")
 
 const router = express.Router();
+//this will find the requireauth middleware and will instantiate it
+//before anything else below it
+router.use(requireAuth)
 
 // --- get all transactions ---
 router.get("/", getLeads);

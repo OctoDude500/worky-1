@@ -29,7 +29,7 @@ const getLeads = async (req, res) => {
         res.status(200).json(getLeads.rows);
     } catch (err) {
         console.log(err.message)
-        res.status(500).json("Couldn't get data. Something went wrong.")
+        res.status(500).json({msg: "Couldn't get data. Something went wrong."})
     }
 }
 
@@ -57,7 +57,7 @@ const createLead = async (req, res) => {
         res.status(201).json({postleads:postLead.rows, postDetails:postDetails.rows});
     } catch (err) {
         console.log(err.message)
-        res.status(500).json("Couldn't add the new lead. Please try again.")
+        res.status(500).json({msg: "Couldn't add the new lead. Please try again."})
     }
 }
 
@@ -74,7 +74,7 @@ const updateLeadDetails = async (req, res) => {
         res.status(201).json(updateDetails.rows);
     } catch (err){
         console.log(err.message)
-        res.status(500).json("Couldn't update comment. Who knows what happened :shrug:");
+        res.status(500).json({msg: "Couldn't update comment. Who knows what happened :shrug:"});
     }
 }
 
@@ -96,7 +96,7 @@ const deleteEntry = async (req, res) => {
         }
     } catch(err) {
         console.log(err);
-        res.status(500).json("Couldn't delete, something went wrong");
+        res.status(500).json({msg: "Couldn't delete, something went wrong"});
     }
 }
 

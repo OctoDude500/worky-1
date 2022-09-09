@@ -2,24 +2,27 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getLeads } from "../features/leads/leadSlice";
 
-import {testFunction} from "../features/leads/leadSlice";
+
 
 const  Home = () => {
 
     const dispatch = useDispatch();
+    const userExists = useSelector((stores) => stores.lucia.user)
     const listItems = useSelector((stores) => stores.sofia.leads)
 
 
 
     useEffect(() => {
-            dispatch(getLeads())
-
-        }, [dispatch])
+            if(userExists) {
+                dispatch(getLeads())
+            }
+        }, [dispatch, userExists])
 
     return(
         <div>
             {
-                listItems
+                userExists.length > 0 &&
+                (listItems
                     .map((item) => {
                         const {name, email, language, applicant_id, comment} = item
 
@@ -32,7 +35,10 @@ const  Home = () => {
                                 <p>{comment}</p>
                             </div>
                         )
-                    })
+                    }))
+            }
+            {
+                userExists.length === 0 && (<div><p>nothing</p></div>)
             }
             {/*<button onClick={() => dispatch(testFunction("name"))}>click</button>*/}
         </div>
