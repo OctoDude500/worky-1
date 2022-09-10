@@ -15,6 +15,7 @@ const  Home = () => {
     useEffect(() => {
             if(userExists) {
                 dispatch(getLeads())
+                console.log("use effect in home")
             }
         }, [dispatch, userExists])
 

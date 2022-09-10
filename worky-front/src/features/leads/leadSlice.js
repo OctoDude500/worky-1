@@ -11,6 +11,7 @@ const initialState = {
     leads: [],
     user: [],
     isLoading: false,
+    test: "this is the state"
 }
 
 //get state of the userAuth slice
@@ -21,12 +22,13 @@ export const getUSerState = createAsyncThunk("leads/getUserState", async ( { use
 
 
 
-export const getLeads = createAsyncThunk("leads/getLeads", async (state) => {
+export const getLeads = createAsyncThunk("leads/getLeads", async () => {
     //const hasUser = useSelector((stores) => stores.lucia.user)
-    console.log("errerererer", state)
+    const isDaUser = initialState.user
+    console.log("errerererer", initialState)
     const config = {
         headers: {
-            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYjY0NGJjY2ItYWY5ZC00MjU0LWIzZTUtYjRlYzJlNDk5N2Y1IiwiaWF0IjoxNjYyNjc5ODExLCJleHAiOjE2NjI3NjYyMTF9.E5JgOmhRxXv0NSua3OkXYOXqgykhQ5-wpRShg4ksDTA"
+            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYjY0NGJjY2ItYWY5ZC00MjU0LWIzZTUtYjRlYzJlNDk5N2Y1IiwiaWF0IjoxNjYyODI5NjA3LCJleHAiOjE2NjI5MTYwMDd9.S3-e41sQWCb6S0iAxHJmA4nuNTqNj0q7_0hyUJ4AyEw"
         }
     }
     try {
@@ -60,10 +62,17 @@ const leadsSlice = createSlice({
                 state.isLoading = false
                 console.error("fetch failed ", state, action)
             })
+            .addCase(getUSerState.pending, (state) => {
+                state.isLoading = true
+            })
             .addCase(getUSerState.fulfilled, (state, action) => {
                 //get state of the userAuth slice
                 state.user = action.payload
                 console.log("is da user ", state.user[0].token)
+            })
+            .addCase(getUSerState.rejected, (state, action) => {
+                state.isLoading = false
+                console.error("setting user in leadslice failed", state, action)
             })
     }
 })
