@@ -1,12 +1,12 @@
 import {useState, useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {loginUser, saveToLocal} from "../features/users/userAuth";
+import {loginUser} from "../features/users/userAuth";
 
 
 const Login = () => {
 
     const dispatch = useDispatch();
-    const userResponse = useSelector((store) => store.lucia.user)
+    //const userResponse = useSelector((store) => store.lucia.user)
     const [text, setText] = useState({
         email: "",
         password: ""
@@ -24,12 +24,12 @@ const Login = () => {
         dispatch(loginUser({text}))
     }
 
-    useEffect(() => {
+    /*useEffect(() => {
         if(userResponse[0]) {
             dispatch(saveToLocal())
-            console.log("dd", userResponse)
+            console.log("useEffect in Login", userResponse)
         }
-    }, [userResponse])
+    }, [userResponse])*/
 
     return(
         <form onSubmit={handleSubmit}>

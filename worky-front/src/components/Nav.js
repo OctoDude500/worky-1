@@ -1,9 +1,9 @@
 import {Link} from "react-router-dom";
-import { signOut, saveToLocal, loggedUser } from "../features/users/userAuth";
+import { signOut, saveToLocal, loggedUser} from "../features/users/userAuth";
 import {useDispatch, useSelector} from "react-redux";
 import {stores} from "../store";
 import {useEffect, useState} from "react";
-import { getUSerState } from "../features/leads/leadSlice";
+//import { getUSerState } from "../features/leads/leadSlice";
 
 const Nav = () => {
 
@@ -17,8 +17,8 @@ const Nav = () => {
         const user = JSON.parse(localStorage.getItem("isUser"))
         if(user){
             console.log("has", user)
-            dispatch(loggedUser(user))
-            dispatch(getUSerState(user))
+           dispatch(loggedUser(user))
+           //dispatch(getUSerState(user))
         }
     }, [])
 

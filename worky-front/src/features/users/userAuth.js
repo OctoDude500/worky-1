@@ -30,17 +30,18 @@ export const loginUser = createAsyncThunk("users/login", async ({text}) => {
         return error.response.data
     }
 })
-
+console.log("is user state ", initialState.user)
 const userAuth = createSlice({
     name: "userSignUp",
     initialState,
     reducers: {
-        saveToLocal: (state, action) => {
+        /*saveToLocal: (state, action) => {
             if(state.user) {
-                console.log("save to local", state.user)
+
                 localStorage.setItem("isUser", JSON.stringify({email: state.user[0].email, token: state.user[0].token }))
+                console.log("save to local", state.user)
             }
-        },
+        },*/
         signOut: (state, action) => {
             state.user = []
             localStorage.removeItem("isUser")
@@ -60,8 +61,10 @@ const userAuth = createSlice({
             })
             .addCase(signUpUser.fulfilled, (state, action) => {
                 console.log("fulfilled action ", action)
+                console.log("fulfilled signup state ", state)
                 state.isLoading = false
                 state.user.push(action.payload)
+                localStorage.setItem("isUser", JSON.stringify({email: state.user[0].email, token: state.user[0].token }))
             })
             .addCase(signUpUser.rejected, (state, action) => {
                 console.log("rejected action ", action)
@@ -74,8 +77,10 @@ const userAuth = createSlice({
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 console.log("login fulfilled", action)
+                console.log("fulfilled login state ", state.user)
                 state.isLoading = false
                 state.user.push(action.payload)
+               localStorage.setItem("isUser", JSON.stringify({email: state.user[0].email, token: state.user[0].token }))
             })
             .addCase(loginUser.rejected, (state, action) => {
                 console.log("login rejected", action)

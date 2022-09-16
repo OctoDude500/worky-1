@@ -1,34 +1,45 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getLeads } from "../features/leads/leadSlice";
+import { getLeads, clearState } from "../features/leads/leadSlice";
 
 
 
 const  Home = () => {
 
     const dispatch = useDispatch();
-    const userExists = useSelector((stores) => stores.lucia.user)
+    const userExists = useSelector((stores) => stores.lucia.user[0])
     const listItems = useSelector((stores) => stores.sofia.leads)
 
+    const token = userExists
 
+    useEffect(() => {
+        dispatch(clearState())
+    }, [])
 
     useEffect(() => {
             if(userExists) {
-                dispatch(getLeads())
+
+                //dispatch(getLeads({token}))
+                dispatch(getLeads({token}))
                 console.log("use effect in home")
+                console.log("222")
+
             }
-        }, [dispatch, userExists])
+        }, [userExists])
+
 
     return(
         <div>
             {
-                userExists.length > 0 &&
+                userExists&&
                 (listItems
-                    .map((item) => {
+                    .flat()
+                    .map((item, index) => {
                         const {name, email, language, applicant_id, comment} = item
 
                         return(
-                            <div>
+                            <div key={index}>
+                                <p>test leads</p>
                                 <p>{applicant_id}</p>
                                 <p>{name}</p>
                                 <p>{email}</p>
@@ -39,9 +50,12 @@ const  Home = () => {
                     }))
             }
             {
-                userExists.length === 0 && (<div><p>nothing</p></div>)
+                //*userExists.length === 0 && (<div><p>nothing</p></div>)*/
             }
-            {/*<button onClick={() => dispatch(testFunction("name"))}>click</button>*/}
+            {!userExists && (
+                <h1>Welcome to worky backend</h1>
+            )
+            }
         </div>
     )
 }

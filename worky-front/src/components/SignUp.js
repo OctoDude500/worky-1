@@ -30,12 +30,12 @@ const SignUp = () => {
         dispatch(signUpUser({text}))
     }
 
-    useEffect(() => {
+    /*useEffect(() => {
         if(userResponse[0]){
-            dispatch(saveToLocal())
+            //dispatch(saveToLocal())
             console.log("signup useeffect", userResponse)
         }
-    }, [userResponse])
+    }, [userResponse])*/
 
 
     return(
