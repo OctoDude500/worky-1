@@ -35,6 +35,7 @@ const getLeads = async (req, res) => {
 
 //--- post applicant---
 const createLead = async (req, res) => {
+    console.log("this is from php ", req.body)
     try {
         const {name, email, phone, language, workplace, attempts, location} = req.body;
         const applicant_id = uuidv4();
@@ -43,6 +44,7 @@ const createLead = async (req, res) => {
         const referral_amount = 0;
         const comment = null;
         const status = 0;
+
 
         const postLead = await pool.query(
             "INSERT INTO applicant (applicant_id, name, email, phone, language, workplace, attempts, location, timestamp) " +

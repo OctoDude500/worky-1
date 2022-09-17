@@ -17,14 +17,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //---- routes -----
 //test
-app.post("/testing", async (req, res) => {
+/*app.post("/testing", async (req, res) => {
     console.log("is request from php", JSON.stringify(req.body))
     res.status(200).json({msg: "submission received"})
-})
+})*/
 //user routes
 app.use("/user", userRoutes);
 //lead routes
 app.use("/", leadRoutes);
+
 
 
 

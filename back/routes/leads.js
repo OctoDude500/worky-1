@@ -8,6 +8,10 @@ const {
 const requireAuth = require("../middleware/requireAuth")
 
 const router = express.Router();
+
+//--- post applicant---
+router.post("/new-lead", createLead);
+
 //this will find the requireauth middleware and will instantiate it
 //before anything else below it
 router.use(requireAuth)
@@ -15,8 +19,7 @@ router.use(requireAuth)
 // --- get all transactions ---
 router.get("/", getLeads);
 
-//--- post applicant---
-router.post("/new-lead", createLead);
+
 
 //--- update details ---
 router.patch("/update-details/:id", updateLeadDetails);
