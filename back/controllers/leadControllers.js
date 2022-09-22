@@ -1,6 +1,9 @@
 //const leadDB = require("../models/leads.sql");
 const pool = require("../models/db");
 const {v4: uuidv4} = require("uuid");
+//const isAlpha = require("validator/es/lib/isAlpha");
+const validator = require("validator");
+//const {ignore} = require("nodemon/lib/rules");
 
 // --- get all transactions ---
 const getLeads = async (req, res) => {
@@ -33,6 +36,34 @@ const getLeads = async (req, res) => {
     }
 }
 
+// post values validation --*
+let newValues = {}
+const validate = async (name, email, phone) => {
+
+    const new_name = name.toLowerCase().trim()
+    //it won't count the blank spaces between characters
+    if (!validator.isAlpha(new_name, ["es-ES"], {ignore: ' '}) || new_name.length <= 10) {
+        throw Error("Please enter a valid name")
+    } else {
+        newValues = {...newValues, new_name}
+    }
+
+    const new_email = email.toLowerCase().trim();
+    if(!validator.isEmail(new_email)) {
+        throw Error("Please enter a valid email")
+    } else {
+        newValues = {...newValues, new_email}
+    }
+
+    const new_phone = phone.trim()
+    if(!validator.isMobilePhone(new_phone) || new_phone.length < 8 || new_phone.length > 8) {
+        throw Error("Please enter a valid phone number")
+    } else {
+        newValues = {...newValues, new_phone}
+    }
+
+}
+
 //--- post applicant---
 const createLead = async (req, res) => {
     console.log("this is from php ", req.body)
@@ -45,21 +76,26 @@ const createLead = async (req, res) => {
         const comment = null;
         const status = 0;
 
+        await validate(name, email, phone);
+        const { new_name, new_email, new_phone } = newValues
+
+        console.log("is new values", newValues)
 
         const postLead = await pool.query(
             "INSERT INTO applicant (applicant_id, name, email, phone, language, workplace, attempts, location, timestamp) " +
             "VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
-            [applicant_id, name, email, phone, language, workplace, attempts, location, timestamp]
+            [applicant_id, new_name, new_email, new_phone, language, workplace, attempts, location, timestamp]
         )
 
         const postDetails = await pool.query(
             "INSERT INTO details (applicant_id, details_id, comment, referral_amount, status) VALUES ($1, $2, $3, $4, $5) RETURNING *",
             [applicant_id, details_id, comment, referral_amount, status]
         )
+        console.log("is post", postLead.rows)
         res.status(201).json({postleads:postLead.rows, postDetails:postDetails.rows});
     } catch (err) {
         console.log(err.message)
-        res.status(500).json({msg: "Couldn't add the new lead. Please try again."})
+        res.status(400).json({msg: err.message})
     }
 }
 
