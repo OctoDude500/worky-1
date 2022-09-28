@@ -1,9 +1,9 @@
 import './App.css';
-import Nav from "./components/Nav";
+import Nav from "./components/nav/Nav";
 import {Route, Routes, Navigate} from "react-router-dom";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import SignUp from "./components/SignUp";
+import Home from "./components/home/Home";
+import Login from "./components/login/Login";
+import SignUp from "./components/signup/SignUp";
 import { useSelector } from "react-redux";
 
 function App() {

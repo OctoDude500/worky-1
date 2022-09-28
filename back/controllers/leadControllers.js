@@ -36,6 +36,34 @@ const getLeads = async (req, res) => {
     }
 }
 
+// ---- get details ---
+const getDetails = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const request = await pool.query(
+            "SELECT * FROM details WHERE details_id = $1",
+            [id]
+        )
+        console.log("is request", id)
+        res.status(200).json(request.rows);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({msg: "Something went wrong"})
+    }
+}
+
+//--- get status ---
+const getStatus = async (req, res) => {
+    try {
+        const request = await pool.query(
+            "SELECT * FROM status",
+        )
+        res.status(200).json(request.rows)
+    } catch (error) {
+        console.log("is error in getstatus", error)
+    }
+}
+
 // post values validation --*
 let newValues = {}
 const validate = async (name, email, phone) => {
@@ -102,17 +130,18 @@ const createLead = async (req, res) => {
 //--- update details ---
 const updateLeadDetails = async (req, res) => {
     const { id } = req.params;
-    const { comment, referral_amount, status } = req.body;
-
+    //const { comment, referral_amount, status } = req.body;
+    const { is_comment, amount, is_type } = req.body;
     try{
         const updateDetails = await pool.query(
             "UPDATE details SET comment = $1, referral_amount = $2, status = $3 WHERE details_id = $4 RETURNING *",
-            [comment, referral_amount, status, id]
+            [is_comment, amount, is_type, id]
         )
         res.status(201).json(updateDetails.rows);
     } catch (err){
         console.log(err.message)
-        res.status(500).json({msg: "Couldn't update comment. Who knows what happened :shrug:"});
+        //res.status(500).json({msg: "Couldn't update comment. Who knows what happened :shrug:"});
+        res.status(500).json({msg: err});
     }
 }
 
@@ -142,5 +171,7 @@ module.exports = {
     getLeads,
     createLead,
     updateLeadDetails,
-    deleteEntry
+    deleteEntry,
+    getDetails,
+    getStatus
 }

@@ -49,7 +49,7 @@ const userAuth = createSlice({
         },
         loggedUser: (state, action) => {
             console.log("logged action", action.payload)
-            state.user = [action.payload]
+            state.user.push(action.payload)
         }
 
     },
@@ -79,8 +79,8 @@ const userAuth = createSlice({
                 console.log("login fulfilled", action)
                 console.log("fulfilled login state ", state.user)
                 state.isLoading = false
-                state.user.push(action.payload)
-               localStorage.setItem("isUser", JSON.stringify({email: state.user[0].email, token: state.user[0].token }))
+                state.user = [action.payload]
+              localStorage.setItem("isUser", JSON.stringify({email: state.user[0].email, token: state.user[0].token }))
             })
             .addCase(loginUser.rejected, (state, action) => {
                 console.log("login rejected", action)

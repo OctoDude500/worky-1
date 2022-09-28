@@ -1,9 +1,10 @@
 import {Link} from "react-router-dom";
-import { signOut, saveToLocal, loggedUser} from "../features/users/userAuth";
+import { signOut, saveToLocal, loggedUser} from "../../features/users/userAuth";
 import {useDispatch, useSelector} from "react-redux";
-import {stores} from "../store";
+import {stores} from "../../store";
 import {useEffect, useState} from "react";
 //import { getUSerState } from "../features/leads/leadSlice";
+import nav from "./nav.css"
 
 const Nav = () => {
 
@@ -31,8 +32,8 @@ const Nav = () => {
             <div>
                 {
                     fetchedUser.length > 0&& (
-                        <div>
-                            <span>hello {fetchedUser[0].email}</span>
+                        <div className="details-box">
+                            <p>Hello <span>{fetchedUser[0].email}</span></p>
                             <div>
                                 <button onClick={() => dispatch(signOut())}>Log out</button>
                             </div>
@@ -42,9 +43,9 @@ const Nav = () => {
                 }
                 {
                     fetchedUser.length === 0 && (
-                        <ul>
+                        <ul className="login">
                             <li><Link to={"/signup"}>Signup</Link></li>
-                            <li><Link to={"/login"}>Login</Link></li>
+                            <li><Link to={"/login"}><span>Login</span></Link></li>
                         </ul>
                     )
                 }

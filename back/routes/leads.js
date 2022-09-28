@@ -3,7 +3,9 @@ const {
     getLeads,
     createLead,
     updateLeadDetails,
-    deleteEntry
+    deleteEntry,
+    getDetails,
+    getStatus
 } = require("../controllers/leadControllers");
 const requireAuth = require("../middleware/requireAuth")
 
@@ -19,7 +21,12 @@ router.use(requireAuth)
 // --- get all transactions ---
 router.get("/", getLeads);
 
+// ---- get status list ---
+router.get("/status", getStatus)
 
+
+//--- get details ---
+router.get("/get-details/:id", getDetails);
 
 //--- update details ---
 router.patch("/update-details/:id", updateLeadDetails);

@@ -5,6 +5,7 @@ import axios from "axios";
 import {stores} from "../../store"
 
 const URL = "http://localhost:8000/";
+const URLupdate = "http://localhost:8000/update-details/:id";
 
 
 const initialState = {
@@ -37,6 +38,19 @@ export const getLeads = createAsyncThunk("leads/getLeads", async ({token}) => {
     }
 })
 
+export const updateDetails = createAsyncThunk("leads/editDetails", async ({token}, {datas}) => {
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token.token}`
+        }
+    }
+    try {
+        const update = await axios.patch(URLupdate, config, datas)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 const leadsSlice = createSlice({
     name: "leads",
     initialState,
@@ -46,9 +60,11 @@ const leadsSlice = createSlice({
         },
         clearState: (state, action) => {
             console.log("clear state")
-            //state.leads.push([])
+            state.leads = []
         }
     },
+
+
     extraReducers: (builder) => {
         builder
             //get
